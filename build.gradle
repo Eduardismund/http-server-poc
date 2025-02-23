@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'application'
 }
 
 group = 'ro.eduardismund'
@@ -14,12 +15,33 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok:1.18.34'
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
+    compileOnly 'jakarta.servlet:jakarta.servlet-api:6.0.0'
+    compileOnly 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.0'
     implementation 'org.apache.tomcat.embed:tomcat-embed-core:10.1.19'
-    implementation 'jakarta.servlet:jakarta.servlet-api:6.0.0'
-    implementation 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.0'
     runtimeOnly 'org.glassfish.jaxb:jaxb-runtime:4.0.0'
 
 }
+
+application {
+    mainClass.set("ro.eduardismund.Main")
+}
+
+tasks.register('uberJar', Jar) {
+    group 'build'
+    archiveBaseName.set("${project.name}-uber")
+    archiveVersion.set("${project.version}")
+
+    from sourceSets.main.output
+
+    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    manifest {
+        attributes('Main-Class': 'ro.eduardismund.Main')
+    }
+}
+
 
 test {
     useJUnitPlatform()

@@ -1,3 +1,15 @@
+## Building for distribution
+
+```bash
+gradle uberJar
+```
+```bash
+java -jar build/libs/http-server-poc-uber-1.0-SNAPSHOT.jar
+```
+
+## API description
+
+
 GET /persons -> list of persons in <persons><person id="123" firstName="edi" lastName="dd" birthdate="2004-07-12"/></persons>
 
 ```bash
