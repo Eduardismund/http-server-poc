@@ -1,4 +1,4 @@
-package ro.eduardismund;
+package ro.eduardismund.model;
 
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
@@ -6,7 +6,6 @@ import jakarta.xml.bind.Marshaller;
 import jakarta.xml.bind.Unmarshaller;
 import lombok.SneakyThrows;
 
-import javax.naming.spi.ObjectFactory;
 import java.io.PrintWriter;
 import java.io.Reader;
 

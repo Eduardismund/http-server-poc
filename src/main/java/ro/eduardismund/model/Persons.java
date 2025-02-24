@@ -1,10 +1,9 @@
-package ro.eduardismund;
+package ro.eduardismund.model;
 
 import jakarta.xml.bind.annotation.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import lombok.Singular;
+import lombok.ToString;
 
 import java.util.List;
 
@@ -12,6 +11,7 @@ import java.util.List;
 @XmlAccessorType(XmlAccessType.FIELD)
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class Persons {
     @XmlElement(name = "person")
     private List<Person> persons;

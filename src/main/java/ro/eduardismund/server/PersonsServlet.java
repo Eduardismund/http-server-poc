@@ -1,15 +1,14 @@
-package ro.eduardismund;
+package ro.eduardismund.server;
 
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.xml.bind.JAXBContext;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
+import ro.eduardismund.model.JaxbUtil;
+import ro.eduardismund.model.Person;
+import ro.eduardismund.model.Persons;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.regex.Pattern;
 
 @RequiredArgsConstructor
@@ -40,6 +39,7 @@ public class PersonsServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        resp.setStatus(HttpServletResponse.SC_CREATED);
         resp.setContentType("text/xml");
         final var person = JaxbUtil.unmarshall(Person.class, req.getReader());
         personsRepository.addPerson(person);

@@ -1,13 +1,15 @@
-package ro.eduardismund;
+package ro.eduardismund.server;
+
+import ro.eduardismund.model.Person;
 
 import java.time.LocalDate;
 import java.util.*;
 
 public class PersonsRepository {
-    private Map<String, Person> persons;
+    private final Map<String, Person> persons;
 
     public PersonsRepository() {
-        persons = new HashMap<String, Person>();
+        persons = new HashMap<>();
         persons.put("123", new Person("Ed", "J", LocalDate.parse("2022-12-12"), "123" ));
     }
 
@@ -15,6 +17,7 @@ public class PersonsRepository {
         return persons.values().stream().toList();
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public String addPerson(Person person){
         final var uuid = UUID.randomUUID().toString();
         person.setId(uuid);
