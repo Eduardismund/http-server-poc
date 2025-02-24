@@ -6,14 +6,14 @@ import org.apache.catalina.startup.Tomcat;
 import java.io.File;
 
 
-public class Server {
+public class ServerApp {
     public static void main(String[] args) throws Exception {
         final var tomcat = new Tomcat();
         tomcat.setPort(8080);
         tomcat.getConnector(); // Required to initialize Tomcat
 
         // Add a web application root (only needed if serving static files)
-        String webAppDir = new File("src/main/webapp").getAbsolutePath();
+        String webAppDir = new File("webapp").getAbsolutePath();
         StandardContext ctx = (StandardContext) tomcat.addWebapp("/", webAppDir);
 
 

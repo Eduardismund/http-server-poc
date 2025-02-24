@@ -1,48 +1,56 @@
-plugins {
-    id 'java'
-    id 'application'
-}
-
-group = 'ro.eduardismund'
-version = '1.0-SNAPSHOT'
-
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    compileOnly 'org.projectlombok:lombok:1.18.34'
-    annotationProcessor 'org.projectlombok:lombok:1.18.34'
-    testImplementation platform('org.junit:junit-bom:5.10.0')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
-    compileOnly 'jakarta.servlet:jakarta.servlet-api:6.0.0'
-    compileOnly 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.0'
-    implementation 'org.apache.tomcat.embed:tomcat-embed-core:10.1.19'
-    runtimeOnly 'org.glassfish.jaxb:jaxb-runtime:4.0.0'
-
-}
-
-application {
-    mainClass.set("ro.eduardismund.Main")
-}
-
-tasks.register('uberJar', Jar) {
-    group 'build'
-    archiveBaseName.set("${project.name}-uber")
-    archiveVersion.set("${project.version}")
-
-    from sourceSets.main.output
-
-    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
-
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-
-    manifest {
-        attributes('Main-Class': 'ro.eduardismund.Main')
+subprojects {subproject ->
+    apply plugin: 'java-library'
+    if(!subproject.name.equals('model')) {
+        apply plugin: 'application'
     }
-}
 
+    group = 'ro.eduardismund'
+    version = '1.0-SNAPSHOT'
 
-test {
-    useJUnitPlatform()
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        compileOnly 'org.projectlombok:lombok:1.18.34'
+        annotationProcessor 'org.projectlombok:lombok:1.18.34'
+        testImplementation platform('org.junit:junit-bom:5.10.0')
+        testImplementation 'org.junit.jupiter:junit-jupiter'
+        compileOnly 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.0'
+        if (!subproject.name.equals('model')) {
+            runtimeOnly 'org.glassfish.jaxb:jaxb-runtime:4.0.0'
+        }
+
+    }
+
+    if(!subproject.name.equals('model')) {
+        def mainClassName = 'ro.eduardismund.client.ClientApp'
+        if (subproject.name.equals('server')) {
+            mainClassName = 'ro.eduardismund.server.ServerApp'
+        }
+        application {
+            mainClass.set(mainClassName)
+        }
+
+        tasks.register('uberJar', Jar) {
+            group = 'build'
+            archiveBaseName.set("${project.name}-uber")
+            archiveVersion.set("${project.version}")
+
+            from sourceSets.main.output
+
+            from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+
+            duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+            manifest {
+                attributes('Main-Class': mainClassName)
+            }
+        }
+
+    }
+
+    test {
+        useJUnitPlatform()
+    }
 }

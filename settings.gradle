@@ -1,2 +1,6 @@
 rootProject.name = 'http-server-poc'
+include 'client'
+include 'model'
+include 'server'
+
 
